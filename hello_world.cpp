@@ -4,9 +4,10 @@
 using namespace std;
 
 int main(){
-	string n;
-	cout << "Enter your name: "
-	cin >> n; 
-	cout << "hello world from " << n;
+	string n;//Объявляем n
+	std::cout << "Enter your name: "//Запрашиваем имя
+	std::cin >> n; //Вводим n
+	std::cout << "hello world from " << n;//Выводим текст
+
 
 }
