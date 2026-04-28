@@ -4,9 +4,9 @@
 
 
 int main(){
-	string n;
-	std::cout << "Enter your name: "
-	std::cin >> n; 
-	std::cout << "hello world from " << n;
+	string n;//объявляем n
+	std::cout << "Enter your name: "//запрашиванм имя
+	std::cin >> n; //вводим n
+	std::cout << "hello world from " << n;//выводим текст
 
 }
