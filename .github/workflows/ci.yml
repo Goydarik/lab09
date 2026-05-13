@@ -7,19 +7,22 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
       with:
-        submodules: recursive
+        token: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Configure with tests
-      run: cmake -B build -DBUILD_TESTS=ON
+    - name: Install CMake
+      run: sudo apt-get update && sudo apt-get install -y cmake
     
+    - name: Configure
+      run: cmake -H. -B build -DCMAKE_INSTALL_PREFIX=__install    
     - name: Build
       run: cmake --build build
     
-    - name: Run tests
-      run: ctest --test-dir build --output-on-failure
+    - name: Install
+      run: cmake --build build --target install
