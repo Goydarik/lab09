@@ -7,21 +7,19 @@ on:
     branches: [ main, master ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
     
-    - name: Install CMake
-      run: sudo apt-get update && sudo apt-get install -y cmake
-    
-    - name: Configure
-      run: cmake -H. -B build -DCMAKE_INSTALL_PREFIX=__install
+    - name: Configure with tests
+      run: cmake -B build -DBUILD_TESTS=ON
     
     - name: Build
       run: cmake --build build
     
-    - name: Install
-      run: cmake --build build --target install
+    - name: Run tests
+      run: ctest --test-dir build --output-on-failure
