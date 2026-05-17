@@ -1,0 +1,67 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [ master, main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ master, main ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Configure CMake
+      run: cmake -H. -B_build -DCMAKE_BUILD_TYPE=\${BUILD_TYPE}
+    
+    - name: Build
+      run: cmake --build _build --config \${BUILD_TYPE}
+    
+    - name: Package with CPack (TGZ)
+      run: |
+        cd _build
+        cpack -G "TGZ"
+        cd ..
+    
+    - name: Package with CPack (DEB)
+      run: |
+        cd _build
+        cpack -G "DEB" || echo "DEB package creation skipped"
+        cd ..
+    
+    - name: Package with CPack (RPM)
+      run: |
+        cd _build
+        cpack -G "RPM" || echo "RPM package creation skipped"
+        cd ..
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: packages
+        path: |
+          _build/*.tar.gz
+          _build/*.deb
+          _build/*.rpm
+        if-no-files-found: warn
+    
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          _build/*.tar.gz
+          _build/*.deb
+          _build/*.rpm
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
