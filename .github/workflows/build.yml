@@ -3,65 +3,36 @@ name: Build and Package
 on:
   push:
     branches: [ master, main ]
-    tags:
-      - 'v*'
   pull_request:
     branches: [ master, main ]
 
-env:
-  BUILD_TYPE: Release
-
 jobs:
   build:
-    runs-on: ubuntu-latest
-    
+    name: ${{ matrix.os }} with ${{ matrix.compiler }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        compiler: [gcc, clang]
+        include:
+          - os: windows-latest
+            compiler: msvc
+        exclude:
+          - os: windows-latest
+            compiler: gcc
+          - os: windows-latest
+            compiler: clang
+
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    
-    - name: Configure CMake
-      run: cmake -H. -B_build -DCMAKE_BUILD_TYPE=\${BUILD_TYPE}
-    
-    - name: Build
-      run: cmake --build _build --config \${BUILD_TYPE}
-    
-    - name: Package with CPack (TGZ)
-      run: |
-        cd _build
-        cpack -G "TGZ"
-        cd ..
-    
-    - name: Package with CPack (DEB)
-      run: |
-        cd _build
-        cpack -G "DEB" || echo "DEB package creation skipped"
-        cd ..
-    
-    - name: Package with CPack (RPM)
-      run: |
-        cd _build
-        cpack -G "RPM" || echo "RPM package creation skipped"
-        cd ..
-    
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: packages
-        path: |
-          _build/*.tar.gz
-          _build/*.deb
-          _build/*.rpm
-        if-no-files-found: warn
-    
-    - name: Create Release
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          _build/*.tar.gz
-          _build/*.deb
-          _build/*.rpm
-        generate_release_notes: true
-      env:
-        GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+
+      - name: Configure CMake
+        run: cmake -S . -B _build -DCMAKE_INSTALL_PREFIX=_install
+
+      - name: Build
+        run: cmake --build _build
+
+      - name: Install
+        run: cmake --build _build --target install
