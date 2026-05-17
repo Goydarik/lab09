@@ -1,0 +1,103 @@
+name: Build and Package
+
+on:
+  push:
+    tags:
+      - 'v*'  # Запуск только при пуше тегов
+  workflow_dispatch:  # Ручной запуск
+
+jobs:
+  # Сборка DEB пакета
+  build-deb:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential
+      
+      - name: Configure CMake
+        run: |
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: |
+          cd build
+          make -j$(nproc)
+      
+      - name: Package with CPack (DEB)
+        run: |
+          cd build
+          cpack -G DEB
+      
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/*.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Сборка RPM пакета
+  build-rpm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential rpm
+      
+      - name: Configure CMake
+        run: |
+          mkdir build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: |
+          cd build
+          make -j$(nproc)
+      
+      - name: Package with CPack (RPM)
+        run: |
+          cd build
+          cpack -G RPM
+      
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/*.rpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Сборка архивов с исходниками
+  build-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Create source archives
+        run: |
+          # Получаем версию из тега
+          VERSION=${GITHUB_REF#refs/tags/v}
+          
+          # Архив .tar.gz
+          tar -czf solver-${VERSION}.tar.gz --exclude=.git --exclude=build .
+          
+          # Архив .zip
+          zip -r solver-${VERSION}.zip . -x "*.git*" "build/*"
+      
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            *.tar.gz
+            *.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
