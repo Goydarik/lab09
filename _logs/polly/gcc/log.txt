@@ -1,0 +1,98 @@
+Execute command: [
+  `which`
+  `cmake`
+]
+[/home/rasul/Goydarik/workspace/projects/lab07]> "which" "cmake"
+/usr/bin/cmake
+Execute command: [
+  `cmake`
+  `--version`
+]
+[/home/rasul/Goydarik/workspace/projects/lab07]> "cmake" "--version"
+cmake version 3.31.6
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+Execute command: [
+  `cmake`
+  `-H.`
+  `-B/home/rasul/Goydarik/workspace/projects/lab07/_builds/gcc`
+  `-GUnix Makefiles`
+  `-DCMAKE_TOOLCHAIN_FILE=/home/rasul/Goydarik/workspace/projects/lab07/tools/polly/gcc.cmake`
+]
+[/home/rasul/Goydarik/workspace/projects/lab07]> "cmake" "-H." "-B/home/rasul/Goydarik/workspace/projects/lab07/_builds/gcc" "-GUnix Makefiles" "-DCMAKE_TOOLCHAIN_FILE=/home/rasul/Goydarik/workspace/projects/lab07/tools/polly/gcc.cmake"
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Warning (dev) at /usr/share/cmake-3.31/Modules/FetchContent.cmake:1373 (message):
+  The DOWNLOAD_EXTRACT_TIMESTAMP option was not given and policy CMP0135 is
+  not set.  The policy's OLD behavior will be used.  When using a URL
+  download, the timestamps of extracted files should preferably be that of
+  the time of extraction, otherwise code that depends on the extracted
+  contents might not be rebuilt if the URL changes.  The OLD behavior
+  preserves the timestamps from the archive instead, but this is usually not
+  what you want.  Update your project to the NEW behavior or specify the
+  DOWNLOAD_EXTRACT_TIMESTAMP option with a value of true to avoid this
+  robustness issue.
+Call Stack (most recent call first):
+  CMakeLists.txt:5 (FetchContent_Declare)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- [polly] Used toolchain: gcc / c++11 support
+-- The C compiler identification is GNU 14.2.0
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Python3: /usr/bin/python3 (found version "3.13.5") found components: Interpreter
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- [polly] Used toolchain: gcc / c++11 support
+-- Configuring done (2.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/rasul/Goydarik/workspace/projects/lab07/_builds/gcc
+Execute command: [
+  `cmake`
+  `--build`
+  `/home/rasul/Goydarik/workspace/projects/lab07/_builds/gcc`
+  `--`
+]
+[/home/rasul/Goydarik/workspace/projects/lab07]> "cmake" "--build" "/home/rasul/Goydarik/workspace/projects/lab07/_builds/gcc" "--"
+[  5%] Building CXX object CMakeFiles/print.dir/sources/print.cpp.o
+[ 11%] Linking CXX static library libprint.a
+[ 11%] Built target print
+[ 17%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+[ 23%] Linking CXX static library ../../../lib/libgtest.a
+[ 23%] Built target gtest
+[ 29%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+[ 35%] Linking CXX static library ../../../lib/libgtest_main.a
+[ 35%] Built target gtest_main
+[ 41%] Building CXX object CMakeFiles/check.dir/tests/test1.cpp.o
+[ 47%] Building CXX object CMakeFiles/check.dir/tests/test_print.cpp.o
+[ 52%] Linking CXX executable check
+[ 52%] Built target check
+[ 58%] Building CXX object CMakeFiles/demo.dir/demo/main.cpp.o
+[ 64%] Linking CXX executable demo
+[ 64%] Built target demo
+[ 70%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o
+[ 76%] Linking CXX static library ../../../lib/libgmock.a
+[ 76%] Built target gmock
+[ 82%] Building CXX object _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o
+[ 88%] Linking CXX static library ../../../lib/libgmock_main.a
+[ 88%] Built target gmock_main
+[ 94%] Building CXX object tests/CMakeFiles/tests.dir/test_print.cpp.o
+[100%] Linking CXX executable tests
+[100%] Built target tests

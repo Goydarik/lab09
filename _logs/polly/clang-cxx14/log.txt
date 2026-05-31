@@ -1,0 +1,59 @@
+Execute command: [
+  `which`
+  `cmake`
+]
+[/home/rasul/Goydarik/workspace/projects/lab07]> "which" "cmake"
+/usr/bin/cmake
+Execute command: [
+  `cmake`
+  `--version`
+]
+[/home/rasul/Goydarik/workspace/projects/lab07]> "cmake" "--version"
+cmake version 3.31.6
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+Execute command: [
+  `cmake`
+  `-H.`
+  `-B/home/rasul/Goydarik/workspace/projects/lab07/_builds/clang-cxx14`
+  `-GUnix Makefiles`
+  `-DCMAKE_TOOLCHAIN_FILE=/home/rasul/Goydarik/workspace/projects/lab07/tools/polly/clang-cxx14.cmake`
+]
+[/home/rasul/Goydarik/workspace/projects/lab07]> "cmake" "-H." "-B/home/rasul/Goydarik/workspace/projects/lab07/_builds/clang-cxx14" "-GUnix Makefiles" "-DCMAKE_TOOLCHAIN_FILE=/home/rasul/Goydarik/workspace/projects/lab07/tools/polly/clang-cxx14.cmake"
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+CMake Warning (dev) at /usr/share/cmake-3.31/Modules/FetchContent.cmake:1373 (message):
+  The DOWNLOAD_EXTRACT_TIMESTAMP option was not given and policy CMP0135 is
+  not set.  The policy's OLD behavior will be used.  When using a URL
+  download, the timestamps of extracted files should preferably be that of
+  the time of extraction, otherwise code that depends on the extracted
+  contents might not be rebuilt if the URL changes.  The OLD behavior
+  preserves the timestamps from the archive instead, but this is usually not
+  what you want.  Update your project to the NEW behavior or specify the
+  DOWNLOAD_EXTRACT_TIMESTAMP option with a value of true to avoid this
+  robustness issue.
+Call Stack (most recent call first):
+  CMakeLists.txt:5 (FetchContent_Declare)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- [polly] Used toolchain: clang / c++14 support
+
+clang not found
+
+CMake Error at tools/polly/utilities/polly_fatal_error.cmake:10 (message):
+Call Stack (most recent call first):
+  tools/polly/compiler/clang.cmake:23 (polly_fatal_error)
+  tools/polly/clang-cxx14.cmake:20 (include)
+  /usr/share/cmake-3.31/Modules/CMakeDetermineSystem.cmake:146 (include)
+  _builds/clang-cxx14/_deps/googletest-src/CMakeLists.txt:6 (project)
+
+
+CMake Error: CMake was unable to find a build program corresponding to "Unix Makefiles".  CMAKE_MAKE_PROGRAM is not set.  You probably need to select a different build tool.
+-- Configuring incomplete, errors occurred!

@@ -1,12 +1,21 @@
 cmake_minimum_required(VERSION 3.4)
 
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.tar.gz
+)
+
+FetchContent_MakeAvailable(googletest)
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_EXAMPLES "Build examples" OFF)
-option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_TESTS "Build tests" ON)
 
-project(print)
+project(print VERSION 1.0.0)
 set(PRINT_VERSION_MAJOR 0)
 set(PRINT_VERSION_MINOR 1)
 set(PRINT_VERSION_PATCH 0)
@@ -17,6 +26,7 @@ set(PRINT_VERSION_STRING "v${PRINT_VERSION}")
 set(PRINT_VERSION
   ${PRINT_VERSION_MAJOR}.${PRINT_VERSION_MINOR}.${PRINT_VERSION_PATCH}.${PRINT_VERSION_TWEAK})
 set(PRINT_VERSION_STRING "v${PRINT_VERSION}")
+
 
 add_library(print STATIC ${CMAKE_CURRENT_SOURCE_DIR}/sources/print.cpp)
 
@@ -48,10 +58,15 @@ install(EXPORT print-config DESTINATION cmake)
 
 if(BUILD_TESTS)
   enable_testing()
-  add_subdirectory(third-party/gtest)
-  file(GLOB \${PROJECT_NAME}_TEST_SOURCES tests/*.cpp)
-  add_executable(check \${\${PROJECT_NAME}_TEST_SOURCES})
-  target_link_libraries(check \${PROJECT_NAME} gtest_main)
+  add_subdirectory(tests)
+  
+  file(GLOB TEST_SOURCES tests/*.cpp)
+  add_executable(check ${TEST_SOURCES})
+  target_link_libraries(check ${PROJECT_NAME} gtest_main)
   add_test(NAME check COMMAND check)
 endif()
 include(CPackConfig.cmake)
+add_executable(demo ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp)
+target_link_libraries(demo print)
+install(TARGETS demo RUNTIME DESTINATION bin)
+
